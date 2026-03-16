@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LogLens Upload</title>
+</head>
+<body>
+
+<h2>Upload Log File</h2>
+
+<input type="file" id="fileInput">
+<button onclick="uploadFile()">Upload</button>
+
+<h3>Result:</h3>
+<pre id="result"></pre>
+
+<script>
+function uploadFile() {
+    const fileInput = document.getElementById("fileInput");
+    const resultBox = document.getElementById("result");
+
+    if (!fileInput.files.length) {
+        alert("Select a file first!");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
+
+    fetch("/upload", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        resultBox.textContent = JSON.stringify(data, null, 2);
+    })
+    .catch(error => {
+        resultBox.textContent = "Error: " + error;
+    });
+}
+</script>
+
+</body>
+</html>
